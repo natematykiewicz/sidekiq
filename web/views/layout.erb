@@ -31,14 +31,9 @@
     <%= erb :_poll_js %>
     <script>
       $('body').chaves({
-        bindings: [
-        <% (Sidekiq::Web::DEFAULT_TABS.merge Sidekiq::Web.tabs).each_pair do |title, url|
-          chr = Sidekiq::Web::SHORTCUTS[title]
-          if chr %>
-            ['<%= chr %>', '<%= t(title) %>', function() { window.location.href = '<%= root_path %><%= url %>' }],
-          <% end %>
-        <% end %>
-        ]
+        bindings: $.map($('a[accesskey]'), function(ele){
+          return([[ele.accessKey, ele.text, function(){window.location.href = ele.pathname}]])
+        })
       });
     </script>
   </body>
